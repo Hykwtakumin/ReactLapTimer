@@ -1,8 +1,8 @@
 import * as React from "react";
 import { render } from "react-dom";
 import { StyleSheet, css } from "aphrodite";
-import Hello from "./Hello";
-import LapTimer from "./LapTimer.tsx";
+import Hello from "./components/Hello";
+import LapTimer from "./components/LapTimer.tsx";
 import { Layout, Button, Icon } from "antd";
 import "antd/dist/antd.css";
 const { Header, Content, Footer } = Layout;
@@ -20,7 +20,7 @@ const App = () => (
         <Hello name="CodeSandbox" />
         <h2>Start editing to see some magic happen {"\u2728"}</h2>
         <Content>
-          <h1>React Lap Timer</h1>
+          <h1>ReactLapTimer</h1>
           <LapTimer defaultState={{ isStarted: false, seconds: 0 }} />
         </Content>
       </Content>
