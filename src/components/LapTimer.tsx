@@ -25,8 +25,8 @@ interface defaultProps {
 }
 
 interface defaultState {
-  isStarted: boolean;
-  seconds: number;
+  isStarted: boolean; //タイマーが作動しているか否か
+  seconds: number; //カウントしている
 }
 
 class LapTimer extends React.Component<defaultProps, defaultState> {
@@ -39,7 +39,22 @@ class LapTimer extends React.Component<defaultProps, defaultState> {
     };
   }
 
+  formatTime = (): String => {
+    const time = this.state.seconds;
+
+    const minutes = Math.floor(time / 6000);
+    const seconds = Math.floor((time / 100) % 60);
+    const mSeconds = time % 1000;
+
+    const m = `0${minutes}`.slice(-2);
+    const s = `0${seconds}`.slice(-2);
+    const ms = `0${time}`.slice(-2);
+
+    return `${m}:${s}:${ms}`;
+  };
+
   handleResetButton = () => {
+    this.timerStop();
     this.setState({ isStarted: false, seconds: 0 });
   };
 
@@ -59,7 +74,7 @@ class LapTimer extends React.Component<defaultProps, defaultState> {
   timerStart = () => {
     if (!this.state.isStarted) {
       this.setState({ isStarted: true });
-      this.counter = setInterval(this.timer, 1000);
+      this.counter = setInterval(this.timer, 10);
     }
   };
 
@@ -78,12 +93,16 @@ class LapTimer extends React.Component<defaultProps, defaultState> {
     }
   };
 
+  componentWillUnmount() {
+    clearInterval(this.counter);
+  }
+
   render() {
     return (
       <div>
         <Layout>
           <Content>
-            <h1 className={css(styles.timerArea)}>{this.state.seconds} 秒</h1>
+            <h1 className={css(styles.timerArea)}>{this.formatTime()} 秒</h1>
             <div className={css(styles.controlerArea)}>
               <Button
                 onClick={this.handleTimerButton}

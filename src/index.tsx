@@ -7,24 +7,29 @@ import { Layout, Button, Icon } from "antd";
 import "antd/dist/antd.css";
 const { Header, Content, Footer } = Layout;
 
-const styles = {
-  fontFamily: "sans-serif",
-  textAlign: "center"
-};
+const styles = StyleSheet.create({
+  headerArea: {
+    color: "	#ffffff"
+  },
+  contentArea: {
+    fontFamily: "sans-serif",
+    textAlign: "center"
+  }
+});
 
 const App = () => (
-  <div style={styles}>
+  <div className={css(styles.contentArea)}>
     <Layout>
-      <Header>This is Header</Header>
+      <Header>
+        <h1 className={css(styles.headerArea)}>React Lap Timer</h1>
+      </Header>
       <Content>
-        <Hello name="CodeSandbox" />
-        <h2>Start editing to see some magic happen {"\u2728"}</h2>
-        <Content>
-          <h1>ReactLapTimer</h1>
-          <LapTimer defaultState={{ isStarted: false, seconds: 0 }} />
-        </Content>
+        <h2>A lap timer implemented by react.</h2>
+        <LapTimer defaultState={{ isStarted: false, seconds: 0 }} />
       </Content>
-      <Footer>This is Footer</Footer>
+      <Footer>
+        <a href="https://github.com/Hykwtakumin/ReactLapTimer">view source</a>
+      </Footer>
     </Layout>
   </div>
 );
