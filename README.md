@@ -1,7 +1,7 @@
 # ReactLapTimer
 
 LapTimerをReact + TypeScriptで実装
-<a href="https://gyazo.com/496cbc9194193c39fc1d01e30ab239d9"><video alt="Video from Gyazo" width="660" autoplay muted loop playsinline><source src="https://i.gyazo.com/496cbc9194193c39fc1d01e30ab239d9.mp4" type="video/mp4" /></video></a>
+[![Image from Gyazo](https://i.gyazo.com/496cbc9194193c39fc1d01e30ab239d9.gif)](https://gyazo.com/496cbc9194193c39fc1d01e30ab239d9)
 
 this project uses:
  - typescript (ES6以上の新記法への対応/静的型付け)
