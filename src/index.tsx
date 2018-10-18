@@ -1,7 +1,6 @@
 import * as React from "react";
 import { render } from "react-dom";
 import { StyleSheet, css } from "aphrodite";
-import Hello from "./components/Hello";
 import LapTimer from "./components/LapTimer.tsx";
 import { Layout, Button, Icon } from "antd";
 import "antd/dist/antd.css";

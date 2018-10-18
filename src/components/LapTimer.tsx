@@ -3,7 +3,7 @@ import { render } from "react-dom";
 import { StyleSheet, css } from "aphrodite";
 import { Layout, Button, Icon } from "antd";
 import "antd/dist/antd.css";
-const { Content } = Layout;
+const { Content, Footer } = Layout;
 
 const styles = StyleSheet.create({
   timerArea: {
@@ -42,6 +42,7 @@ class LapTimer extends React.Component<defaultProps, defaultState> {
   formatTime = (): String => {
     const time = this.state.seconds;
 
+    //分がちゃんと取れてない気がする
     const minutes = Math.floor(time / 6000);
     const seconds = Math.floor((time / 100) % 60);
     const mSeconds = time % 1000;
@@ -51,6 +52,14 @@ class LapTimer extends React.Component<defaultProps, defaultState> {
     const ms = `0${time}`.slice(-2);
 
     return `${m}:${s}:${ms}`;
+  };
+
+  handleSaveButton = () => {
+    /*ラップタイムをJSON形式でDLできるようにする*/
+  };
+
+  handleLapButton = () => {
+    /*リスト形式でラップタイムを列挙していく*/
   };
 
   handleResetButton = () => {
@@ -121,6 +130,11 @@ class LapTimer extends React.Component<defaultProps, defaultState> {
               </Button>
             </div>
           </Content>
+          <Footer>
+            <Button onClick={this.handleSaveButton} icon="download">
+              タイムを保存する
+            </Button>
+          </Footer>
         </Layout>
       </div>
     );
