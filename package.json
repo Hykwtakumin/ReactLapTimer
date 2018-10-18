@@ -6,6 +6,7 @@
   "dependencies": {
     "antd": "3.10.1",
     "aphrodite": "2.2.3",
+    "asearch": "0.0.7",
     "moment": "2.22.2",
     "react": "16.5.2",
     "react-dom": "^16.2.0",

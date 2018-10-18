@@ -1,21 +1,28 @@
 import * as React from "react";
 import { render } from "react-dom";
 import { StyleSheet, css } from "aphrodite";
-import { Layout, Button, Icon } from "antd";
+import { Layout, Button, Icon, List } from "antd";
 import "antd/dist/antd.css";
 const { Content, Footer } = Layout;
 
 const styles = StyleSheet.create({
-  timerArea: {
+  container: {
     fontFamily: "sans-serif",
     textAlign: "center"
+  },
+  timerArea: {
+    fontSize: "3rem"
   },
   controlerArea: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     listStyleType: "none",
-    fontFamily: "sans-serif",
+    marginBottom: "3%"
+  },
+  lapListArea: {
+    width: "60%",
+    alignSelf: "center",
     textAlign: "center"
   }
 });
@@ -27,46 +34,65 @@ interface defaultProps {
 interface defaultState {
   isStarted: boolean; //タイマーが作動しているか否か
   seconds: number; //カウントしている
+  laps: Array<number>;
 }
 
 class LapTimer extends React.Component<defaultProps, defaultState> {
   constructor(props: defaultProps) {
     super(props);
-    const { isStarted, seconds } = props.defaultState;
+    const { isStarted, seconds, laps } = props.defaultState;
     this.state = {
       isStarted: isStarted,
-      seconds: seconds
+      seconds: seconds,
+      laps: laps
     };
   }
 
-  formatTime = (): String => {
-    const time = this.state.seconds;
-
-    //分がちゃんと取れてない気がする
-    const minutes = Math.floor(time / 6000);
-    const seconds = Math.floor((time / 100) % 60);
-    const mSeconds = time % 1000;
+  //秒を分に変換
+  formatTime = (time: number): String => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
 
     const m = `0${minutes}`.slice(-2);
     const s = `0${seconds}`.slice(-2);
-    const ms = `0${time}`.slice(-2);
 
-    return `${m}:${s}:${ms}`;
+    return `${m}:${s}`;
   };
 
+  //ラップタイムをDLできるようにする
   handleSaveButton = () => {
-    /*ラップタイムをJSON形式でDLできるようにする*/
+    this.timerStop();
+    const time = this.state.seconds; //最終的なタイム
+    const laps = this.state.laps.map((lap, index) => {
+      return `Lap${index + 1}:${this.formatTime(lap)} +${this.formatTime(
+        time - lap
+      )}秒`;
+    });
+
+    const results = {
+      time: this.formatTime(time),
+      laps: laps
+    };
+
+    location.href =
+      "data:application/octet-stream," +
+      encodeURIComponent(JSON.stringify(results));
   };
 
   handleLapButton = () => {
-    /*リスト形式でラップタイムを列挙していく*/
+    const lapSeconds = this.state.seconds; //Lapボタンを押した時点での秒数
+    const laps = this.state.laps;
+    laps.push(lapSeconds);
+    this.setState({ laps: laps });
   };
 
+  //タイマーとラップをリセット
   handleResetButton = () => {
     this.timerStop();
-    this.setState({ isStarted: false, seconds: 0 });
+    this.setState({ isStarted: false, seconds: 0, laps: [] });
   };
 
+  //タイマーの測定/停止
   handleTimerButton = () => {
     if (!this.state.isStarted) {
       this.timerStart();
@@ -83,7 +109,7 @@ class LapTimer extends React.Component<defaultProps, defaultState> {
   timerStart = () => {
     if (!this.state.isStarted) {
       this.setState({ isStarted: true });
-      this.counter = setInterval(this.timer, 10);
+      this.counter = setInterval(this.timer, 1000);
     }
   };
 
@@ -108,11 +134,17 @@ class LapTimer extends React.Component<defaultProps, defaultState> {
 
   render() {
     return (
-      <div>
+      <div className={css(styles.container)}>
         <Layout>
           <Content>
-            <h1 className={css(styles.timerArea)}>{this.formatTime()} 秒</h1>
+            <h1 className={css(styles.timerArea)}>
+              {this.formatTime(this.state.seconds)}秒
+            </h1>
             <div className={css(styles.controlerArea)}>
+              <Button onClick={this.handleResetButton} icon="redo" size="large">
+                Reset
+              </Button>
+
               <Button
                 onClick={this.handleTimerButton}
                 icon={this.handleIcon()}
@@ -121,14 +153,24 @@ class LapTimer extends React.Component<defaultProps, defaultState> {
                 {!this.state.isStarted ? "Start" : "Stop"}
               </Button>
 
-              <Button onClick={this.handleResetButton} icon="redo" size="large">
-                Reset
-              </Button>
-
-              <Button onClick={this.handleResetButton} icon="plus" size="large">
+              <Button onClick={this.handleLapButton} icon="plus" size="large">
                 Lap
               </Button>
             </div>
+          </Content>
+          <Content className={css(styles.lapListArea)}>
+            <List
+              header={<div>Laps</div>}
+              bordered
+              dataSource={this.state.laps}
+              renderItem={item => (
+                <List.Item>
+                  Lap{this.state.laps.indexOf(item) + 1} :
+                  {this.formatTime(item)}
+                  {`+${this.formatTime(this.state.seconds - item)}秒`}
+                </List.Item>
+              )}
+            />
           </Content>
           <Footer>
             <Button onClick={this.handleSaveButton} icon="download">

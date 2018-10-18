@@ -10,6 +10,9 @@ const styles = StyleSheet.create({
   headerArea: {
     color: "	#ffffff"
   },
+  paragraphArea: {
+    marginTop: "3%"
+  },
   contentArea: {
     fontFamily: "sans-serif",
     textAlign: "center"
@@ -23,8 +26,10 @@ const App = () => (
         <h1 className={css(styles.headerArea)}>React Lap Timer</h1>
       </Header>
       <Content>
-        <h2>A lap timer implemented by react.</h2>
-        <LapTimer defaultState={{ isStarted: false, seconds: 0 }} />
+        <h2 className={css(styles.paragraphArea)}>
+          A lap timer implemented by react.
+        </h2>
+        <LapTimer defaultState={{ isStarted: false, seconds: 0, laps: [] }} />
       </Content>
       <Footer>
         <a href="https://github.com/Hykwtakumin/ReactLapTimer">view source</a>
